@@ -1,0 +1,7 @@
+/.env
+/data/db/handleRutube.db
+/data/db/handleTelegram.db
+/data/db/handleVkontakte.db
+/data/log/process-videos-from-youtube.log
+/.env.prod
+/vendor/

@@ -1,0 +1,51 @@
+{
+    "name": "coderun/cross-posting-videos-on-social-networks-from-youtube",
+    "description": "Cross-posting videos on social networks from youtube",
+    "keywords": ["Laminas","Telegram","RuTube","Vkontakte", "YouTube"],
+    "type": "project",
+    "authors": [
+        {
+            "name": "Djo",
+            "email": "izm@zixn.ru",
+            "homepage": "https://github.com/northmule/cross-posting-videos-on-social-networks-from-youtube",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "google/apiclient": "^2.7",
+        "longman/telegram-bot": "^0.75.0",
+        "athlon1600/youtube-downloader": "^3.0",
+        "symfony/http-client": "^5.4",
+        "symfony/dependency-injection": "^5.4",
+        "vlucas/phpdotenv": "^5.5",
+        "laminas/laminas-config-aggregator": "^1.9",
+        "laminas/laminas-stdlib": "^3.13",
+        "ramsey/uuid": "^4.2",
+        "monolog/monolog": "^2.9",
+        "symfony/filesystem": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Coderun\\Container\\": "module/Container/src",
+            "Coderun\\RuTube\\": "module/RuTube/src",
+            "Coderun\\Vkontakte\\": "module/Vkontakte/src",
+            "Coderun\\Telegram\\": "module/Telegram/src",
+            "Coderun\\Youtube\\": "module/Youtube/src",
+            "Coderun\\Common\\": "module/Common/src"
+        }
+    },
+    "config": {
+        "platform-check": false,
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "scripts": {
+        "post-update-cmd": "Google\\Task\\Composer::cleanup"
+    },
+    "extra": {
+        "google/apiclient-services": [
+            "YouTube"
+        ]
+    }
+}
