@@ -13,7 +13,6 @@
     ],
     "require": {
         "google/apiclient": "^2.7",
-        "longman/telegram-bot": "^0.75.0",
         "athlon1600/youtube-downloader": "^3.0",
         "symfony/http-client": "^5.4",
         "symfony/dependency-injection": "^5.4",
