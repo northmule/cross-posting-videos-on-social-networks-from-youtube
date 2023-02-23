@@ -6,4 +6,4 @@
 /.env.prod
 /vendor/
 /data/log/full-transfer-of-videos-from-youtube-to-rutub.log
-/tools/vendor/
+/tools/
