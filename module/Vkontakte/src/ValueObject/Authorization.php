@@ -21,7 +21,7 @@ class Authorization
     protected string $apiVersion;
     /** @var string  */
     protected string $albumId;
-    
+
     public function __construct(Api $config)
     {
         $this->token = $config->getToken();
@@ -29,7 +29,7 @@ class Authorization
         $this->apiVersion = $config->getVersion();
         $this->albumId = $config->getAlbumId();
     }
-    
+
     /**
      * Get token
      *
@@ -39,7 +39,7 @@ class Authorization
     {
         return $this->token;
     }
-    
+
     /**
      * Get groupId
      *
@@ -49,7 +49,7 @@ class Authorization
     {
         return $this->groupId;
     }
-    
+
     /**
      * Get apiVersion
      *
@@ -59,7 +59,7 @@ class Authorization
     {
         return $this->apiVersion;
     }
-    
+
     /**
      * Get albumId
      *
@@ -69,6 +69,4 @@ class Authorization
     {
         return $this->albumId;
     }
-    
-    
 }

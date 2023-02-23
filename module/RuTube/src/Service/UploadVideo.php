@@ -17,10 +17,10 @@ class UploadVideo
 {
     /** @var string  */
     protected const API_VIDEO_URL = 'https://rutube.ru/api/video/';
-    
+
     /** @var HttpClientInterface  */
     protected HttpClientInterface $client;
-    
+
     /**
      * @param HttpClientInterface $client
      */
@@ -28,7 +28,7 @@ class UploadVideo
     {
         $this->client = $client;
     }
-    
+
     /**
      * @param Video         $video
      * @param Authorization $authorization
@@ -42,12 +42,12 @@ class UploadVideo
             'headers' => [
                 'Authorization' => $authorization->getAuthorizationStringForHeader(),
             ],
-            'body' => [
-                'url' => $video->getDirectLink(),
-                'title' => $video->getTitle(),
+            'body'    => [
+                'url'         => $video->getDirectLink(),
+                'title'       => $video->getTitle(),
                 'description' => $video->getDescription(),
-                'author' => $authorization->getAuthor(),
-            ]
+                'author'      => $authorization->getAuthor(),
+            ],
         ]);
     }
 }

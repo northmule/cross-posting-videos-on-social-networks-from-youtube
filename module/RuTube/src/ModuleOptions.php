@@ -28,7 +28,7 @@ class ModuleOptions extends AbstractOptions
     {
         $this->api = new Api($options);
     }
-    
+
     /**
      * Get api
      *

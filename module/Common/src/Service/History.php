@@ -23,13 +23,13 @@ class History
     protected Filesystem $filesystem;
     /** @var string  */
     protected string $dirPath;
-    
+
     public function __construct(Filesystem $filesystem, string $dirPath)
     {
         $this->filesystem = $filesystem;
         $this->dirPath = $dirPath;
     }
-    
+
     /**
      * Сохраняет данные в файл
      *
@@ -40,13 +40,13 @@ class History
      */
     public function save(string $pathFile, string $content)
     {
-        $this->filesystem->appendToFile(sprintf('%s/%s', $this->dirPath, $pathFile), ($content.PHP_EOL));
+        $this->filesystem->appendToFile(sprintf('%s/%s', $this->dirPath, $pathFile), ($content . PHP_EOL));
     }
-    
+
     /**
      * Проверка данных в файле
      *
-     * @param string $pathFile
+     * @param string  $pathFile
      * @param        $content
      *
      * @return bool
@@ -61,5 +61,4 @@ class History
         $history = array_flip($db);
         return array_key_exists($content, $history);
     }
-    
 }

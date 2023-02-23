@@ -19,10 +19,10 @@ class UploadVideo
 {
     /** @var string  */
     protected const API_URL = 'https://api.telegram.org';
-    
+
     /** @var HttpClientInterface  */
     protected HttpClientInterface $client;
-    
+
     /**
      * @param HttpClientInterface $client
      */
@@ -30,7 +30,7 @@ class UploadVideo
     {
         $this->client = $client;
     }
-    
+
     /**
      * @param Video         $video
      * @param Authorization $authorization
@@ -40,13 +40,14 @@ class UploadVideo
      */
     public function upload(Video $video, Authorization $authorization): ResponseInterface
     {
-        return $this->client->request('POST',
+        return $this->client->request(
+            'POST',
             sprintf('%s/bot%s/%s', self::API_URL, $authorization->getToken(), 'sendMessage'),
             [
                 'body' => [
                     'chat_id' => $authorization->getChanel(),
-                    'text' => $video->getLink(),
-                ]
+                    'text'    => $video->getLink(),
+                ],
             ]
         );
     }

@@ -30,7 +30,7 @@ class History
         array $options = []
     ): HistoryService {
         $commonOptions = $container->get(CommonModuleOptions::class);
-    
+
         return new HistoryService(new Filesystem(), $commonOptions->getApi()->getDirHistory() ?? '');
     }
 }

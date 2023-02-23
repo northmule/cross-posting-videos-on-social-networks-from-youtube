@@ -11,5 +11,4 @@ namespace Coderun\Container\Exception;
  */
 interface ExceptionInterface
 {
-
 }

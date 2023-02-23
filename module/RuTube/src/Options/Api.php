@@ -19,7 +19,7 @@ class Api extends AbstractOptions
     protected string $token;
     /** @var string  */
     protected string $userId;
-    
+
     /**
      * Get token
      *
@@ -29,7 +29,7 @@ class Api extends AbstractOptions
     {
         return $this->token;
     }
-    
+
     /**
      * @param string $token
      *
@@ -40,7 +40,7 @@ class Api extends AbstractOptions
         $this->token = strval($token ?? '');
         return $this;
     }
-    
+
     /**
      * Get userId
      *
@@ -50,7 +50,7 @@ class Api extends AbstractOptions
     {
         return $this->userId;
     }
-    
+
     /**
      * @param string $userId
      *
@@ -61,6 +61,4 @@ class Api extends AbstractOptions
         $this->userId = strval($userId ?? '');
         return $this;
     }
-    
-    
 }

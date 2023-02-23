@@ -31,13 +31,13 @@ class FindVideo
 {
     /** @var string  */
     protected const YOUTUBE_VIDEO_URL = 'https://www.youtube.com/watch?v=%s';
-    
+
     /** @var Google_Service_YouTube  */
     protected Google_Service_YouTube $googleService;
     /** @var SearchParams  */
     protected SearchParams $searchParams;
     protected YouTubeDownloader $youTubeDownloader;
-    
+
     /**
      * @param Google_Service_YouTube $googleService
      * @param SearchParams           $searchParams
@@ -52,7 +52,7 @@ class FindVideo
         $this->searchParams = $searchParams;
         $this->youTubeDownloader = $youTubeDownloader;
     }
-    
+
     /**
      *  Сделать запрос с API и вернёт коллекцию видео
      *
@@ -86,10 +86,10 @@ class FindVideo
                 new YoutubeVideo($directLink, $downloadLinks->getInfo())
             );
         }
-        
+
         return $videoMap;
     }
-    
+
     /**
      * Все видео с канала
      *
@@ -108,7 +108,7 @@ class FindVideo
                 ['id' => implode(',', $chunkIds)]
             );
         }
-    
+
         foreach ($videosList as $videos) {
             /** @var Google_Service_YouTube_Video $video */
             foreach ($videos as $video) {
@@ -134,7 +134,7 @@ class FindVideo
         }
         return $videoMap;
     }
-    
+
     /**
      * Список ид видео
      *
@@ -153,7 +153,7 @@ class FindVideo
         }
         return $videosIds;
     }
-    
+
     /**
      * Список всех ИД, до тех пор пока не закончатся страницы
      *

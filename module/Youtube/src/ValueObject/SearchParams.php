@@ -21,14 +21,14 @@ class SearchParams
     protected string $maxResults;
     /** @var string  */
     protected string $order;
-    
+
     public function __construct(Api $api)
     {
         $this->channels = $api->getChannels();
         $this->maxResults = $api->getMaxResult();
         $this->order = $api->getOrder();
     }
-    
+
     /**
      * Параметры поиска для первого канала
      *
@@ -37,12 +37,12 @@ class SearchParams
     public function getForFirstChannel(): array
     {
         return [
-            'channelId' => $this->channels[0] ?? null,
+            'channelId'  => $this->channels[0] ?? null,
             'maxResults' => intval($this->maxResults),
-            'order' => $this->order,
+            'order'      => $this->order,
         ];
     }
-    
+
     /**
      * Массив с списком параметров для каждого канала
      *
@@ -51,16 +51,14 @@ class SearchParams
     public function getForAllChannels(): array
     {
         $params = [];
-        
+
         foreach ($this->channels as $channel) {
             $params[] = [
-                'channelId' => $channel,
+                'channelId'  => $channel,
                 'maxResults' => intval($this->maxResults),
-                'order' => $this->order,
+                'order'      => $this->order,
             ];
         }
         return $params;
     }
-    
-    
 }

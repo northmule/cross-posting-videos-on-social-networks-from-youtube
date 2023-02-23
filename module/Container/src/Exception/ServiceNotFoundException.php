@@ -16,5 +16,4 @@ class ServiceNotFoundException extends OutOfBoundsException implements
     ExceptionInterface,
     NotFoundExceptionInterface
 {
-
 }

@@ -35,7 +35,7 @@ class ContainerUnit implements
     protected ContainerInterface $container;
     /** @var string */
     protected string $instanceOf;
-    
+
     /**
      * ContainerUnit constructor.
      *
@@ -53,7 +53,7 @@ class ContainerUnit implements
         $this->containerUnit = new ContainerBuilder();
         $this->configure($this->containerUnit, $config);
     }
-    
+
     /**
      * {@inheritDoc}
      * @template T
@@ -77,7 +77,7 @@ class ContainerUnit implements
         }
         return $service;
     }
-    
+
     /**
      * {@inheritDoc}
      *
@@ -88,7 +88,7 @@ class ContainerUnit implements
     {
         return $this->containerUnit->has($id);
     }
-    
+
     /**
      * Register service
      *
@@ -99,7 +99,7 @@ class ContainerUnit implements
     {
         return $this->set(get_class($service), $service);
     }
-    
+
     /**
      * Sets a service.
      *
@@ -117,7 +117,7 @@ class ContainerUnit implements
         $this->containerUnit->set($id, $service);
         return $this;
     }
-    
+
     /**
      * Removes a service definition.
      *
@@ -129,7 +129,7 @@ class ContainerUnit implements
         $this->containerUnit->removeDefinition($id);
         return $this;
     }
-    
+
     /**
      * {@inheritDoc}
      *
@@ -139,7 +139,7 @@ class ContainerUnit implements
     {
         return $this->container;
     }
-    
+
     /**
      * Validate service
      *
@@ -150,7 +150,7 @@ class ContainerUnit implements
     {
         return $service instanceof $this->instanceOf;
     }
-    
+
     /**
      * Configure service
      *

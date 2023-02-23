@@ -17,13 +17,13 @@ class Authorization
     protected string $token;
     /** @var string  */
     protected string $chanel;
-    
+
     public function __construct(Api $config)
     {
         $this->token = $config->getToken();
         $this->chanel = $config->getChannel();
     }
-    
+
     /**
      * Get token
      *
@@ -33,7 +33,7 @@ class Authorization
     {
         return $this->token;
     }
-    
+
     /**
      * Get chanel
      *

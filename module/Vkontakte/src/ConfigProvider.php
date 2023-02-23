@@ -11,7 +11,7 @@ class ConfigProvider
 {
     /** @var string  */
     public const CONFIG_KEY = 'vkontakte_config';
-    
+
     /**
      * @return array<string,array>
      */
@@ -21,25 +21,21 @@ class ConfigProvider
             'dependencies' => $this->getDependencies(),
         ];
     }
-    
+
     /**
      * @return \string[][]
      */
     public function getDependencies(): array
     {
         return [
-            'invokables' => [
-            ],
-            'reflection' => [
-            
-            ],
-            'factories' => [
-                ModuleOptions::class => ModuleOptionsFactory::class,
+            'invokables' => [],
+            'reflection' => [],
+            'factories'  => [
+                ModuleOptions::class                          => ModuleOptionsFactory::class,
                 \Coderun\Vkontakte\Service\UploadVideo::class => \Coderun\Vkontakte\Service\Factory\UploadVideo::class,
                 \Coderun\Vkontakte\Handler\UploadVideo::class => \Coderun\Vkontakte\Handler\Factory\UploadVideo::class,
-               
-            ]
+
+            ],
         ];
     }
-    
 }

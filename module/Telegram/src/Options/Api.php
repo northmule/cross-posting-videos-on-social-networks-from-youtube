@@ -17,7 +17,7 @@ class Api extends AbstractOptions
     protected string $channel;
     /** @var string  */
     protected string $token;
-    
+
     /**
      * Get channel
      *
@@ -27,7 +27,7 @@ class Api extends AbstractOptions
     {
         return $this->channel;
     }
-    
+
     /**
      * Get token
      *
@@ -37,7 +37,7 @@ class Api extends AbstractOptions
     {
         return $this->token;
     }
-    
+
     /**
      * @param string $channel
      *
@@ -48,7 +48,7 @@ class Api extends AbstractOptions
         $this->channel = $channel;
         return $this;
     }
-    
+
     /**
      * @param string $token
      *
@@ -59,6 +59,4 @@ class Api extends AbstractOptions
         $this->token = $token;
         return $this;
     }
-    
-    
 }

@@ -11,7 +11,7 @@ class ConfigProvider
 {
     /** @var string  */
     public const CONFIG_KEY = 'youtube_config';
-    
+
     /**
      * @return array<string,array>
      */
@@ -21,23 +21,19 @@ class ConfigProvider
             'dependencies' => $this->getDependencies(),
         ];
     }
-    
+
     /**
      * @return \string[][]
      */
     public function getDependencies(): array
     {
         return [
-            'invokables' => [
-            ],
-            'reflection' => [
-            
-            ],
-            'factories' => [
-                ModuleOptions::class => ModuleOptionsFactory::class,
+            'invokables' => [],
+            'reflection' => [],
+            'factories'  => [
+                ModuleOptions::class                      => ModuleOptionsFactory::class,
                 \Coderun\Youtube\Service\FindVideo::class => \Coderun\Youtube\Service\Factory\FindVideo::class,
-            ]
+            ],
         ];
     }
-    
 }

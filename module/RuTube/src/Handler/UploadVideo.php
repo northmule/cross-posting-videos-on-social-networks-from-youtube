@@ -20,8 +20,7 @@ class UploadVideo
     protected Authorization $authorization;
     /** @var UploadVideoService  */
     protected UploadVideoService $service;
-    
-    
+
     /**
      * @param Authorization      $authorization
      * @param UploadVideoService $service
@@ -31,7 +30,7 @@ class UploadVideo
         $this->authorization = $authorization;
         $this->service = $service;
     }
-    
+
     /**
      * @param Video $video
      *
@@ -45,5 +44,4 @@ class UploadVideo
         $response->cancel();
         return $content ?? [];
     }
-    
 }

@@ -19,13 +19,13 @@ class Authorization
     protected string $token;
     /** @var string  */
     protected string $author;
-    
+
     public function __construct(Api $config)
     {
         $this->token = $config->getToken();
         $this->author = $config->getUserId();
     }
-    
+
     /**
      * Get token
      *
@@ -35,7 +35,7 @@ class Authorization
     {
         return $this->token;
     }
-    
+
     /**
      * Get author
      *
@@ -45,8 +45,8 @@ class Authorization
     {
         return $this->author;
     }
-    
-    
+
+
     /**
      * @return string
      */
@@ -54,6 +54,4 @@ class Authorization
     {
         return sprintf('Token %s', $this->token);
     }
-    
-    
 }

@@ -21,7 +21,7 @@ class Api extends AbstractOptions
     protected string $albumId;
     /** @var string  */
     protected string $version;
-    
+
     /**
      * Get groupId
      *
@@ -31,7 +31,7 @@ class Api extends AbstractOptions
     {
         return $this->groupId;
     }
-    
+
     /**
      * Get token
      *
@@ -41,7 +41,7 @@ class Api extends AbstractOptions
     {
         return $this->token;
     }
-    
+
     /**
      * Get albumId
      *
@@ -51,7 +51,7 @@ class Api extends AbstractOptions
     {
         return $this->albumId;
     }
-    
+
     /**
      * Get version
      *
@@ -61,7 +61,7 @@ class Api extends AbstractOptions
     {
         return $this->version;
     }
-    
+
     /**
      * @param string $groupId
      *
@@ -72,7 +72,7 @@ class Api extends AbstractOptions
         $this->groupId = $groupId;
         return $this;
     }
-    
+
     /**
      * @param string $token
      *
@@ -83,7 +83,7 @@ class Api extends AbstractOptions
         $this->token = $token;
         return $this;
     }
-    
+
     /**
      * @param string $albumId
      *
@@ -94,7 +94,7 @@ class Api extends AbstractOptions
         $this->albumId = $albumId;
         return $this;
     }
-    
+
     /**
      * @param string $version
      *
@@ -105,6 +105,4 @@ class Api extends AbstractOptions
         $this->version = $version;
         return $this;
     }
-    
-    
 }

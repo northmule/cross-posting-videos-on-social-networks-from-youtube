@@ -2,7 +2,7 @@ includes:
 	- phar://tools/vendor/phpstan/phpstan/phpstan.phar/conf/config.levelmax.neon
 parameters:
     paths:
-    		- src
+    		- module
     bootstrapFiles:
     		- 'vendor/autoload.php'
     ignoreErrors:

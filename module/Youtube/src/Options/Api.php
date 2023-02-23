@@ -23,7 +23,7 @@ class Api extends AbstractOptions
     protected string $maxResult;
     /** @var string  */
     protected string $order;
-    
+
     /**
      * Get channels
      *
@@ -33,7 +33,7 @@ class Api extends AbstractOptions
     {
         return $this->channels;
     }
-    
+
     /**
      * Get token
      *
@@ -43,7 +43,7 @@ class Api extends AbstractOptions
     {
         return $this->token;
     }
-    
+
     /**
      * Get appName
      *
@@ -53,7 +53,7 @@ class Api extends AbstractOptions
     {
         return $this->appName;
     }
-    
+
     /**
      * Get maxResult
      *
@@ -63,7 +63,7 @@ class Api extends AbstractOptions
     {
         return $this->maxResult;
     }
-    
+
     /**
      * Get order
      *
@@ -73,7 +73,7 @@ class Api extends AbstractOptions
     {
         return $this->order;
     }
-    
+
     /**
      * @param string $channels
      *
@@ -84,7 +84,7 @@ class Api extends AbstractOptions
         $this->channels = explode(',', $channels);
         return $this;
     }
-    
+
     /**
      * @param string $token
      *
@@ -95,7 +95,7 @@ class Api extends AbstractOptions
         $this->token = $token;
         return $this;
     }
-    
+
     /**
      * @param string $appName
      *
@@ -106,7 +106,7 @@ class Api extends AbstractOptions
         $this->appName = $appName;
         return $this;
     }
-    
+
     /**
      * @param string $maxResult
      *
@@ -117,7 +117,7 @@ class Api extends AbstractOptions
         $this->maxResult = $maxResult;
         return $this;
     }
-    
+
     /**
      * @param string $order
      *
@@ -128,7 +128,4 @@ class Api extends AbstractOptions
         $this->order = $order;
         return $this;
     }
-
-
-    
 }

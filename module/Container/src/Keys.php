@@ -21,7 +21,7 @@ class Keys
     public const REFLECTION = 'reflection';
     /** @var string  */
     public const SERVICES = 'services';
-    
+
     /**
      * @return array<int,string>
      */

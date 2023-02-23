@@ -13,7 +13,6 @@ use RuntimeException;
  */
 class InvalidServiceException extends RuntimeException implements ExceptionInterface
 {
-    
     /**
      * @param string $name
      *
@@ -23,9 +22,9 @@ class InvalidServiceException extends RuntimeException implements ExceptionInter
     {
         return new(sprintf('Invalid configuration parameter: %s', $name));
     }
-    
+
     /**
-     * @param string $class
+     * @param string  $class
      * @param        $service
      *
      * @return InvalidServiceException

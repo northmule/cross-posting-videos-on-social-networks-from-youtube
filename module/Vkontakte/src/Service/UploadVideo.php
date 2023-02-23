@@ -19,10 +19,10 @@ class UploadVideo
 {
     /** @var string  */
     protected const API_VIDEO_SAVE_URL = 'https://api.vk.com/method/video.save?';
-    
+
     /** @var HttpClientInterface  */
     protected HttpClientInterface $client;
-    
+
     /**
      * @param HttpClientInterface $client
      */
@@ -30,7 +30,7 @@ class UploadVideo
     {
         $this->client = $client;
     }
-    
+
     /**
      * @param Video         $video
      * @param Authorization $authorization
@@ -40,25 +40,26 @@ class UploadVideo
      */
     public function upload(Video $video, Authorization $authorization): ResponseInterface
     {
-        $response = $this->client->request('GET',
+        $response = $this->client->request(
+            'GET',
             self::API_VIDEO_SAVE_URL,
             [
                 'query' => [
-                    'group_id' => $authorization->getGroupId(),
-                    'link' => $video->getLink(),
-                    'name' => $video->getTitle(),
-                    'description' => $video->getDescription(),
-                    'wallpost' => 1,
+                    'group_id'     => $authorization->getGroupId(),
+                    'link'         => $video->getLink(),
+                    'name'         => $video->getTitle(),
+                    'description'  => $video->getDescription(),
+                    'wallpost'     => 1,
                     'access_token' => $authorization->getToken(),
-                    'album_id' => $authorization->getAlbumId(),
-                    'v' => $authorization->getApiVersion(),
-                ]
+                    'album_id'     => $authorization->getAlbumId(),
+                    'v'            => $authorization->getApiVersion(),
+                ],
             ]
         );
-    
+
         $contentResponse = json_decode($response->getContent());
         $uploadUrl = $contentResponse->response->upload_url ?? null;
-        if(empty($uploadUrl)) {
+        if (empty($uploadUrl)) {
             return $response;
         }
         return $this->client->request('GET', $uploadUrl);

@@ -17,7 +17,7 @@ class Api extends AbstractOptions
     protected string $dirHistory;
     /** @var string  */
     protected string $dirLog;
-    
+
     /**
      * Get dirHistory
      *
@@ -27,7 +27,7 @@ class Api extends AbstractOptions
     {
         return $this->dirHistory;
     }
-    
+
     /**
      * Get dirLog
      *
@@ -37,7 +37,7 @@ class Api extends AbstractOptions
     {
         return $this->dirLog;
     }
-    
+
     /**
      * @param string $dirHistory
      *
@@ -48,7 +48,7 @@ class Api extends AbstractOptions
         $this->dirHistory = $dirHistory;
         return $this;
     }
-    
+
     /**
      * @param string $dirLog
      *
@@ -59,8 +59,4 @@ class Api extends AbstractOptions
         $this->dirLog = $dirLog;
         return $this;
     }
-    
-    
-    
-    
 }

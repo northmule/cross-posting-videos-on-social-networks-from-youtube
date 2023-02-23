@@ -33,13 +33,11 @@ class Video
      * @var string
      */
     protected string $channelId = '';
-    
     /**
      * Прямая ссылка, для скачивания
      * @var string
      */
     protected string $directLink = '';
-    
     /**
      * Обычная ссылка на видео, браузерная
      * @var string
@@ -51,8 +49,7 @@ class Video
     protected string $description = '';
     /** @var string  */
     protected string $thumbnailUrl = '';
-    
-    
+
     /**
      * @param string            $directLink
      * @param VideoDetails|null $videoDetails
@@ -63,7 +60,7 @@ class Video
         $data = Closure::bind(function (): array {
             return $this->videoDetails ?? [];
         }, null)->call($videoDetails);
-        
+
         $this->videoId = $data['videoId'] ?? '';
         $this->title = $data['title'] ?? '';
         $this->keywords = $data['keywords'] ?? [];
@@ -75,7 +72,7 @@ class Video
             $this->link = sprintf('https://www.youtube.com/watch?v=%s', $this->videoId);
         }
     }
-    
+
     /**
      * Get videoId
      *
@@ -85,7 +82,7 @@ class Video
     {
         return $this->videoId;
     }
-    
+
     /**
      * Get keywords
      *
@@ -95,7 +92,7 @@ class Video
     {
         return $this->keywords;
     }
-    
+
     /**
      * Get channelId
      *
@@ -105,7 +102,7 @@ class Video
     {
         return $this->channelId;
     }
-    
+
     /**
      * Get directLink
      *
@@ -115,7 +112,7 @@ class Video
     {
         return $this->directLink;
     }
-    
+
     /**
      * Get title
      *
@@ -125,7 +122,7 @@ class Video
     {
         return $this->title;
     }
-    
+
     /**
      * Get description
      *
@@ -135,7 +132,7 @@ class Video
     {
         return $this->description;
     }
-    
+
     /**
      * Get link
      *
@@ -145,7 +142,7 @@ class Video
     {
         return $this->link;
     }
-    
+
     /**
      * Get thumbnailUrl
      *
@@ -155,7 +152,7 @@ class Video
     {
         return $this->thumbnailUrl;
     }
-    
+
     /**
      * Ссылка на превью картинку
      *
@@ -171,6 +168,4 @@ class Video
         $endThumbnail = array_pop($thumbnails);
         return $endThumbnail['url'] ?? '';
     }
-    
-    
 }
