@@ -31,13 +31,13 @@ class Api extends AbstractOptions
     }
 
     /**
-     * @param string $token
+     * @param string|null $token
      *
      * @return Api
      */
-    protected function setToken($token): Api
+    protected function setToken(?string $token): Api
     {
-        $this->token = strval($token ?? '');
+        $this->token = $token ?? '';
         return $this;
     }
 
@@ -52,13 +52,13 @@ class Api extends AbstractOptions
     }
 
     /**
-     * @param string $userId
+     * @param string|null $userId
      *
      * @return Api
      */
-    protected function setUserId($userId): Api
+    protected function setUserId(?string $userId): Api
     {
-        $this->userId = strval($userId ?? '');
+        $this->userId = $userId ?? '';
         return $this;
     }
 }

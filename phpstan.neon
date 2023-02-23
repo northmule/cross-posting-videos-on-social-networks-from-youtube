@@ -6,3 +6,4 @@ parameters:
     bootstrapFiles:
     		- 'vendor/autoload.php'
     ignoreErrors:
+        - '#Cannot call method getApi\(\) on mixed.#'

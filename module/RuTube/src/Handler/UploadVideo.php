@@ -34,7 +34,7 @@ class UploadVideo
     /**
      * @param Video $video
      *
-     * @return array
+     * @return array<string,mixed>
      * @throws TransportExceptionInterface
      */
     public function upload(Video $video): array
@@ -42,6 +42,6 @@ class UploadVideo
         $response = $this->service->upload($video, $this->authorization);
         $content = $response->toArray();
         $response->cancel();
-        return $content ?? [];
+        return $content;
     }
 }

@@ -18,6 +18,9 @@ class Authorization
     /** @var string  */
     protected string $chanel;
 
+    /**
+     * @param Api $config
+     */
     public function __construct(Api $config)
     {
         $this->token = $config->getToken();

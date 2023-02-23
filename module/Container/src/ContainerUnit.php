@@ -39,9 +39,9 @@ class ContainerUnit implements
     /**
      * ContainerUnit constructor.
      *
-     * @param array              $config
-     * @param ContainerInterface $container
-     * @param string             $instanceOf
+     * @param array<string,string> $config
+     * @param ContainerInterface   $container
+     * @param string               $instanceOf
      */
     public function __construct(
         array $config,
@@ -56,17 +56,19 @@ class ContainerUnit implements
 
     /**
      * {@inheritDoc}
-     * @template T
+     * @template T of object
      * @param class-string<T> $id
      * @return T
      * @throws \Exception
+     * @phpstan-return T
      */
-    public function get($id): object
+    public function get(string $id): object
     {
         if (!$this->has($id)) {
             throw new ServiceNotFoundException(sprintf('Can\'t create service with name %s', $id));
         }
         if ($id === 'service_container') {
+            /** @phpstan-ignore-next-line  */
             return $this;
         }
         $service = $this->containerUnit->get($id);
@@ -75,6 +77,7 @@ class ContainerUnit implements
                 sprintf('Service with name %s is invalid, expected %s interface', $id, $this->instanceOf)
             );
         }
+        /** @phpstan-ignore-next-line  */
         return $service;
     }
 
@@ -82,9 +85,10 @@ class ContainerUnit implements
      * {@inheritDoc}
      *
      * @param string $id
+     *
      * @return bool
      */
-    public function has($id): bool
+    public function has(string $id): bool
     {
         return $this->containerUnit->has($id);
     }

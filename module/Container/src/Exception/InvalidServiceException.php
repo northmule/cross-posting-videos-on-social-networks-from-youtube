@@ -20,17 +20,17 @@ class InvalidServiceException extends RuntimeException implements ExceptionInter
      */
     public static function invalidParameter(string $name): InvalidServiceException
     {
-        return new(sprintf('Invalid configuration parameter: %s', $name));
+        return new self(sprintf('Invalid configuration parameter: %s', $name));
     }
 
     /**
-     * @param string  $class
-     * @param        $service
+     * @param string $class
+     * @param  mixed  $service
      *
      * @return InvalidServiceException
      */
     public static function unsupportedType(string $class, $service): InvalidServiceException
     {
-        return new (sprintf('Unsupported type \'%s\' for %s', gettype($service), $class));
+        return new self(sprintf('Unsupported type \'%s\' for %s', gettype($service), $class));
     }
 }

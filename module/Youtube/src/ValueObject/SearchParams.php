@@ -22,6 +22,9 @@ class SearchParams
     /** @var string  */
     protected string $order;
 
+    /**
+     * @param Api $api
+     */
     public function __construct(Api $api)
     {
         $this->channels = $api->getChannels();
@@ -44,9 +47,9 @@ class SearchParams
     }
 
     /**
-     * Массив с списком параметров для каждого канала
+     * Массив со списком параметров для каждого канала
      *
-     * @return array<int, array>
+     * @return array<int, array<string, mixed>>
      */
     public function getForAllChannels(): array
     {

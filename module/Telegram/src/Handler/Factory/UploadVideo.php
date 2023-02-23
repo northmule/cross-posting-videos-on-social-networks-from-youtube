@@ -20,9 +20,9 @@ class UploadVideo
     /**
      * Create service
      *
-     * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array<mixed>       $options
+     * @param ContainerInterface  $container
+     * @param string              $requestedName
+     * @param array<string,mixed> $options
      * @return UploadVideoHandler
      */
     public function __invoke(
@@ -33,6 +33,7 @@ class UploadVideo
         /** @var ModuleOptions $config */
         $config = $container->get(ModuleOptions::class);
         $authorization = new Authorization($config->getApi());
+        /** @var UploadVideoService $service */
         $service = $container->get(UploadVideoService::class);
         return new UploadVideoHandler($authorization, $service);
     }

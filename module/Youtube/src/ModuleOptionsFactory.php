@@ -26,6 +26,7 @@ class ModuleOptionsFactory
         string $requestedName,
         array $options = []
     ): ModuleOptions {
+        /** @phpstan-ignore-next-line  */
         return new ModuleOptions($container->get('config')[ConfigProvider::CONFIG_KEY] ?? []);
     }
 }

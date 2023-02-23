@@ -22,7 +22,7 @@ class ModuleOptions extends AbstractOptions
     /**
      * ModuleOptions constructor.
      *
-     * @param array<mixed>|\Traversable<mixed>|null $options
+     * @param null|array<string, mixed> $options
      */
     public function __construct($options = null)
     {

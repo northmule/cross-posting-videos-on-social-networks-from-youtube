@@ -24,7 +24,7 @@ class FindVideo
      *
      * @param ContainerInterface $container
      * @param string             $requestedName
-     * @param array              $options
+     * @param array<int, string> $options
      * @return FindVideoService
      */
     public function __invoke(

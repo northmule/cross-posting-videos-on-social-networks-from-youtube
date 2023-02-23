@@ -20,6 +20,9 @@ class Authorization
     /** @var string  */
     protected string $author;
 
+    /**
+     * @param Api $config
+     */
     public function __construct(Api $config)
     {
         $this->token = $config->getToken();

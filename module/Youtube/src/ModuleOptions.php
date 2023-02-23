@@ -7,8 +7,6 @@ namespace Coderun\Youtube;
 use Coderun\Youtube\Options\Api;
 use Laminas\Stdlib\AbstractOptions;
 
-use function is_array;
-
 /**
  * Class ModuleOptions
  *
@@ -22,7 +20,7 @@ class ModuleOptions extends AbstractOptions
     /**
      * ModuleOptions constructor.
      *
-     * @param array|\Traversable<mixed>|null $options
+     * @param null|array<string, mixed> $options
      */
     public function __construct($options = null)
     {

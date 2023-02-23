@@ -36,6 +36,7 @@ class FindVideo
     protected Google_Service_YouTube $googleService;
     /** @var SearchParams  */
     protected SearchParams $searchParams;
+    /** @var YouTubeDownloader  */
     protected YouTubeDownloader $youTubeDownloader;
 
     /**
@@ -69,7 +70,9 @@ class FindVideo
         );
         /** @var Google_Service_YouTube_Video $video */
         foreach ($videos as $video) {
-            $downloadLinks = $this->youTubeDownloader->getDownloadLinks(sprintf(self::YOUTUBE_VIDEO_URL, $video->getId()));
+            $downloadLinks = $this->youTubeDownloader->getDownloadLinks(
+                sprintf(self::YOUTUBE_VIDEO_URL, $video->getId())
+            );
             $directLink = null;
             if ($downloadLinks->getAllFormats()) {
                 $videFormats = $downloadLinks->getCombinedFormats();
@@ -156,7 +159,7 @@ class FindVideo
 
     /**
      * Список всех ИД, до тех пор пока не закончатся страницы
-     *
+     * @param array<string, mixed> $params
      * @return array<int, string>
      */
     protected function getVideoIdsWithParams(array $params = []): array

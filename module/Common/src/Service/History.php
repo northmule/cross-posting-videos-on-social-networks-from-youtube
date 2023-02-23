@@ -24,6 +24,10 @@ class History
     /** @var string  */
     protected string $dirPath;
 
+    /**
+     * @param Filesystem $filesystem
+     * @param string     $dirPath
+     */
     public function __construct(Filesystem $filesystem, string $dirPath)
     {
         $this->filesystem = $filesystem;
@@ -46,12 +50,12 @@ class History
     /**
      * Проверка данных в файле
      *
-     * @param string  $pathFile
-     * @param        $content
+     * @param string $pathFile
+     * @param string $content
      *
      * @return bool
      */
-    public function contentExists(string $pathFile, $content): bool
+    public function contentExists(string $pathFile, string $content): bool
     {
         if (!$this->filesystem->exists(sprintf('%s/%s', $this->dirPath, $pathFile))) {
             return false;

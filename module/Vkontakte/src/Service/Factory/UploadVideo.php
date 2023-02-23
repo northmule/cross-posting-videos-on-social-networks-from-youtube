@@ -18,9 +18,9 @@ class UploadVideo
     /**
      * Create service
      *
-     * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array              $options
+     * @param ContainerInterface   $container
+     * @param string               $requestedName
+     * @param array<string, mixed> $options
      * @return UploadVideoService
      */
     public function __invoke(

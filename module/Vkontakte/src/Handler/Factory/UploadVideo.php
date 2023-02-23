@@ -33,6 +33,7 @@ class UploadVideo
         /** @var ModuleOptions $config */
         $config = $container->get(ModuleOptions::class);
         $authorization = new Authorization($config->getApi());
+        /** @var UploadVideoService $service */
         $service = $container->get(UploadVideoService::class);
         return new UploadVideoHandler($authorization, $service);
     }

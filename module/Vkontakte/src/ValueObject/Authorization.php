@@ -22,6 +22,9 @@ class Authorization
     /** @var string  */
     protected string $albumId;
 
+    /**
+     * @param Api $config
+     */
     public function __construct(Api $config)
     {
         $this->token = $config->getToken();

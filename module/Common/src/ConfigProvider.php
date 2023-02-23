@@ -13,7 +13,7 @@ class ConfigProvider
     public const CONFIG_KEY = 'common_config';
 
     /**
-     * @return array<string,array>
+     * @return array<string, array<array<string>>>
      */
     public function __invoke(): array
     {
@@ -23,7 +23,7 @@ class ConfigProvider
     }
 
     /**
-     * @return \string[][]
+     * @return array<string, array<string,string>>
      */
     public function getDependencies(): array
     {

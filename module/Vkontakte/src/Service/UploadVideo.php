@@ -58,6 +58,7 @@ class UploadVideo
         );
 
         $contentResponse = json_decode($response->getContent());
+        /** @phpstan-ignore-next-line */
         $uploadUrl = $contentResponse->response->upload_url ?? null;
         if (empty($uploadUrl)) {
             return $response;
