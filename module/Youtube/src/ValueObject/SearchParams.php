@@ -32,7 +32,7 @@ class SearchParams
     /**
      * Параметры поиска для первого канала
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getForFirstChannel(): array
     {

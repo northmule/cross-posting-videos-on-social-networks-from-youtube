@@ -40,7 +40,10 @@
         }
     },
     "scripts": {
-        "post-update-cmd": "Google\\Task\\Composer::cleanup"
+        "post-update-cmd": "Google\\Task\\Composer::cleanup",
+        "cs-check": "tools/vendor/bin/phpcs",
+        "cs-fix": "tools/vendor/bin/phpcbf",
+        "phpstan": "tools/vendor/bin/phpstan analyze -c phpstan.neon"
     },
     "extra": {
         "google/apiclient-services": [

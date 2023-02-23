@@ -3,10 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Забирает видео из ютуб и постит их:
- *  - Телеграм
- *  - Рутуб
- *  - Вконтакте (группа)
+ * Перенос всех видео с Ютуб в Рутуб
  */
 
 use Coderun\Common\ModuleOptions as CommonModuleOptions;
@@ -27,12 +24,8 @@ require 'vendor/autoload.php';
 /** @var ContainerInterface  $container */
 $container = require 'config/container.php';
 
-final class ProcessVideosFromYoutube
+final class FullTransferOfVideosFromYoutubeToRutub
 {
-    /** @var UploadVideoVk */
-    protected UploadVideoVk $vkontakte;
-    /** @var UploadVideoTelegram */
-    protected UploadVideoTelegram $telegram;
     /** @var UploadVideoRutube */
     protected UploadVideoRutube $rutube;
     /** @var Logger  */
@@ -55,25 +48,21 @@ final class ProcessVideosFromYoutube
         $this->logger = new Logger('script');
         $this->logger->pushHandler(
             new StreamHandler(
-                sprintf('%s/process-videos-from-youtube.log', $this->commonOptions->getApi()->getDirLog()),
+                sprintf('%s/full-transfer-of-videos-from-youtube-to-rutub.log', $this->commonOptions->getApi()->getDirLog()),
                 Logger::DEBUG)
         );
         
         $youtube = $container->get(\Coderun\Youtube\Service\FindVideo::class);
-        $this->vkontakte = $container->get(UploadVideoVk::class);
-        $this->telegram = $container->get(UploadVideoTelegram::class);
         $this->rutube = $container->get(UploadVideoRutube::class);
         try {
             $this->logger->info('Start processing');
-            $videosMap = $youtube->find();
+            $videosMap = $youtube->findAll();
             $this->logger->info('YouTube video count: '. $videosMap->count());
             /**
              * @var string $videoId
              * @var Video  $video
              */
             foreach ($videosMap as $video) {
-                $this->handleVkontakte($video);
-                $this->handleTelegram($video);
                 $this->handleRutube($video);
             }
         } catch (Throwable $e) {
@@ -85,52 +74,15 @@ final class ProcessVideosFromYoutube
 
     }
     
-    /**
-     * @param Video $video
-     *
-     * @return void
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     */
-    protected function handleVkontakte(Video $video) {
-        if ($this->history->contentExists('handleVkontakte.db', $video->getVideoId())) {
-            $this->logger->info('Skip handleVkontakte: '.$video->getVideoId());
-            return;
-        }
-        $this->logger->info('Start: handleVkontakte');
-        $response = $this->vkontakte->upload($video);
-        if ($response['response']) {
-            $this->history->save('handleVkontakte.db', $video->getVideoId());
-        }
-        $this->logger->info('End: handleVkontakte', ['response' => $response]);
-    }
-
-    /**
-     * @param Video $video
-     *
-     * @return void
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     */
-    protected function handleTelegram(Video $video) {
-        $dbPatch = 'handleTelegram.db';
-        if ($this->history->contentExists($dbPatch, $video->getVideoId())) {
-            $this->logger->info('Skip handleTelegram: '.$video->getVideoId());
-            return;
-        }
-        $this->logger->info('Start: handleTelegram');
-        $response = $this->telegram->upload($video);
-        if ($response['ok']) {
-            $this->history->save($dbPatch, $video->getVideoId());
-        }
-        $this->logger->info('End: handleTelegram', ['response' => $response]);
-    }
     
     /**
      * @param Video $video
      *
      * @return void
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     protected function handleRutube(Video $video) {
-        $dbPatch = 'handleRutube.db';
+        $dbPatch = 'full_handleRutube.db';
         if ($this->history->contentExists($dbPatch, $video->getVideoId())) {
             $this->logger->info('Skip handleRutube: '.$video->getVideoId());
             return;
@@ -145,4 +97,4 @@ final class ProcessVideosFromYoutube
     
 }
 
-(new ProcessVideosFromYoutube())($container);
+(new FullTransferOfVideosFromYoutubeToRutub())($container);

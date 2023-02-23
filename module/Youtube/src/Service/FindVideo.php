@@ -19,6 +19,8 @@ use YouTube\YouTubeDownloader;
 use function array_pop;
 use function implode;
 use function sprintf;
+use function array_chunk;
+use function array_filter;
 
 /**
  * Class FindVideo
@@ -89,6 +91,51 @@ class FindVideo
     }
     
     /**
+     * Все видео с канала
+     *
+     * @return VideoMap
+     * @throws TooManyRequestsException
+     * @throws YouTubeException
+     */
+    public function findAll(): VideoMap
+    {
+        $videoMap = new VideoMap();
+        $videoIds = $this->getVideoIdsWithParams();
+        $videosList = [];
+        foreach (array_chunk($videoIds, 25) as $chunkIds) {
+            $videosList[] = $this->googleService->videos->listVideos(
+                'id',
+                ['id' => implode(',', $chunkIds)]
+            );
+        }
+    
+        foreach ($videosList as $videos) {
+            /** @var Google_Service_YouTube_Video $video */
+            foreach ($videos as $video) {
+                $downloadLinks = $this->youTubeDownloader->getDownloadLinks(
+                    sprintf(self::YOUTUBE_VIDEO_URL, $video->getId())
+                );
+                $directLink = null;
+                if ($downloadLinks->getAllFormats()) {
+                    $videFormats = $downloadLinks->getCombinedFormats();
+                    /** @var StreamFormat $videoHighQuality */
+                    $videoHighQuality = array_pop($videFormats);
+                    $directLink = $videoHighQuality->url ?? null;
+                }
+                if ($directLink === null) {
+                    // todo запись в лог
+                    continue;
+                }
+                $videoMap->offsetSet(
+                    $video->getId(),
+                    new YoutubeVideo($directLink, $downloadLinks->getInfo())
+                );
+            }
+        }
+        return $videoMap;
+    }
+    
+    /**
      * Список ид видео
      *
      * @return array<int, string>
@@ -105,5 +152,27 @@ class FindVideo
             $videosIds[] = $item->getId()->getVideoId();
         }
         return $videosIds;
+    }
+    
+    /**
+     * Список всех ИД, до тех пор пока не закончатся страницы
+     *
+     * @return array<int, string>
+     */
+    protected function getVideoIdsWithParams(array $params = []): array
+    {
+        $listSearch = $this->googleService->search->listSearch(
+            'id',
+            array_merge($params, $this->searchParams->getForFirstChannel())
+        );
+        static $videosIds = [];
+        /** @var Google_Service_YouTube_SearchResult $item */
+        foreach ($listSearch->getItems() as $item) {
+            $videosIds[] = $item->getId()->getVideoId();
+        }
+        if ($listSearch->getNextPageToken()) {
+            return $this->getVideoIdsWithParams(['pageToken' => $listSearch->getNextPageToken()]);
+        }
+        return array_reverse(array_filter($videosIds));
     }
 }

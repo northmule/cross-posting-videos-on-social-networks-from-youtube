@@ -7,6 +7,7 @@ namespace Coderun\Common\Service\Factory;
 use Coderun\Common\Service\History as HistoryService;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Coderun\Common\ModuleOptions as CommonModuleOptions;
 
 /**
  * Class UploadVideo
@@ -28,6 +29,8 @@ class History
         string $requestedName,
         array $options = []
     ): HistoryService {
-        return new HistoryService(new Filesystem());
+        $commonOptions = $container->get(CommonModuleOptions::class);
+    
+        return new HistoryService(new Filesystem(), $commonOptions->getApi()->getDirHistory() ?? '');
     }
 }

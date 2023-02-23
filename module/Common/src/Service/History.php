@@ -10,7 +10,7 @@ use function file;
 use function array_map;
 use function array_flip;
 use function array_key_exists;
-use function strval;
+use function sprintf;
 
 /**
  * Class History
@@ -21,10 +21,13 @@ class History
 {
     /** @var Filesystem  */
     protected Filesystem $filesystem;
+    /** @var string  */
+    protected string $dirPath;
     
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Filesystem $filesystem, string $dirPath)
     {
         $this->filesystem = $filesystem;
+        $this->dirPath = $dirPath;
     }
     
     /**
@@ -37,7 +40,7 @@ class History
      */
     public function save(string $pathFile, string $content)
     {
-        $this->filesystem->appendToFile($pathFile, ($content.PHP_EOL));
+        $this->filesystem->appendToFile(sprintf('%s/%s', $this->dirPath, $pathFile), ($content.PHP_EOL));
     }
     
     /**
@@ -50,10 +53,10 @@ class History
      */
     public function contentExists(string $pathFile, $content): bool
     {
-        if (!$this->filesystem->exists($pathFile)) {
+        if (!$this->filesystem->exists(sprintf('%s/%s', $this->dirPath, $pathFile))) {
             return false;
         }
-        $db = file($pathFile);
+        $db = file(sprintf('%s/%s', $this->dirPath, $pathFile));
         $db = array_map('trim', $db);
         $history = array_flip($db);
         return array_key_exists($content, $history);
