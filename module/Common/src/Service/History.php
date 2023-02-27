@@ -11,6 +11,7 @@ use function array_map;
 use function array_flip;
 use function array_key_exists;
 use function sprintf;
+use function file_get_contents;
 
 /**
  * Class History
@@ -45,6 +46,41 @@ class History
     public function save(string $pathFile, string $content)
     {
         $this->filesystem->appendToFile(sprintf('%s/%s', $this->dirPath, $pathFile), ($content . PHP_EOL));
+    }
+
+    /**
+     * @param string $pathFile
+     *
+     * @return string
+     */
+    public function getFileContent(string $pathFile): string
+    {
+        return file_get_contents(sprintf('%s/%s', $this->dirPath, $pathFile));
+    }
+
+    /**
+     * @param string $pathFile
+     *
+     * @return bool
+     */
+    public function fileExists(string $pathFile): bool
+    {
+        return $this->filesystem->exists(sprintf('%s/%s', $this->dirPath, $pathFile));
+    }
+    
+    /**
+     * @param string $pathFile
+     *
+     * @return int
+     */
+    public function contentCount(string $pathFile): int
+    {
+        if (!$this->filesystem->exists(sprintf('%s/%s', $this->dirPath, $pathFile))) {
+            return 0;
+        }
+        $db = file(sprintf('%s/%s', $this->dirPath, $pathFile));
+        $db = array_map('trim', $db);
+        return count(array_filter($db));
     }
 
     /**

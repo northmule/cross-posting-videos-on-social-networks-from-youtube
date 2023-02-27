@@ -100,42 +100,65 @@ class FindVideo
      * @throws TooManyRequestsException
      * @throws YouTubeException
      */
-    public function findAll(): VideoMap
+    public function findAll(int $batch = 5): VideoMap
     {
-        $videoMap = new VideoMap();
         $videoIds = $this->getVideoIdsWithParams();
         $videosList = [];
-        foreach (array_chunk($videoIds, 25) as $chunkIds) {
-            $videosList[] = $this->googleService->videos->listVideos(
-                'id',
-                ['id' => implode(',', $chunkIds)]
-            );
+//        foreach (array_chunk($videoIds, 25) as $chunkIds) {
+//            $videosList[] = $this->googleService->videos->listVideos( // todo лишний запрос
+//                'id',
+//                ['id' => implode(',', $chunkIds)]
+//            );
+//        }
+
+        $videoMap = new VideoMap();
+        /** @var Google_Service_YouTube_Video $video */
+        foreach ($videoIds as $videoId) {
+            $this->composeVideoObject($videoId, $videoMap);
         }
 
-        foreach ($videosList as $videos) {
-            /** @var Google_Service_YouTube_Video $video */
-            foreach ($videos as $video) {
-                $downloadLinks = $this->youTubeDownloader->getDownloadLinks(
-                    sprintf(self::YOUTUBE_VIDEO_URL, $video->getId())
-                );
-                $directLink = null;
-                if ($downloadLinks->getAllFormats()) {
-                    $videFormats = $downloadLinks->getCombinedFormats();
-                    /** @var StreamFormat $videoHighQuality */
-                    $videoHighQuality = array_pop($videFormats);
-                    $directLink = $videoHighQuality->url ?? null;
-                }
-                if ($directLink === null) {
-                    // todo запись в лог
-                    continue;
-                }
-                $videoMap->offsetSet(
-                    $video->getId(),
-                    new YoutubeVideo($directLink, $downloadLinks->getInfo())
-                );
+        return $videoMap;
+    }
+
+    /**
+     * @param string   $videoId
+     * @param VideoMap $videoMap
+     *
+     * @return void
+     * @throws TooManyRequestsException
+     * @throws YouTubeException
+     */
+    protected function composeVideoObject(string $videoId, VideoMap $videoMap): void
+    {
+        static $errors = [];
+
+        try {
+            $errors[$videoId] = 0;
+            $downloadLinks = $this->youTubeDownloader->getDownloadLinks(
+                sprintf(self::YOUTUBE_VIDEO_URL, $videoId)
+            );
+            $directLink = null;
+            if ($downloadLinks->getAllFormats()) {
+                $videFormats = $downloadLinks->getCombinedFormats();
+                /** @var StreamFormat $videoHighQuality */
+                $videoHighQuality = array_pop($videFormats);
+                $directLink = $videoHighQuality->url ?? null;
+            }
+            if ($directLink === null) {
+                // todo запись в лог
+                return;
+            }
+            $videoMap->offsetSet(
+                $videoId,
+                new YoutubeVideo($directLink, $downloadLinks->getInfo())
+            );
+        } catch (YouTubeException $e) {
+            $errors[$videoId]++;
+            if ($errors[$videoId] < 3) {
+                $this->composeVideoObject($videoId, $videoMap);
+                return;
             }
         }
-        return $videoMap;
     }
 
     /**
