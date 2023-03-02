@@ -67,7 +67,7 @@ class History
     {
         return $this->filesystem->exists(sprintf('%s/%s', $this->dirPath, $pathFile));
     }
-    
+
     /**
      * @param string $pathFile
      *

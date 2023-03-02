@@ -96,7 +96,7 @@ final class ProcessVideosFromYoutube
             $this->logger->info('Skip handleVkontakte: '.$video->getVideoId());
             return;
         }
-        $this->logger->info('Start: handleVkontakte');
+        $this->logger->info('Start: handleVkontakte '.$video->getVideoId());
         $response = $this->vkontakte->upload($video);
         if ($response['response']) {
             $this->history->save('handleVkontakte.db', $video->getVideoId());
@@ -116,7 +116,7 @@ final class ProcessVideosFromYoutube
             $this->logger->info('Skip handleTelegram: '.$video->getVideoId());
             return;
         }
-        $this->logger->info('Start: handleTelegram');
+        $this->logger->info('Start: handleTelegram '.$video->getVideoId());
         $response = $this->telegram->upload($video);
         if ($response['ok']) {
             $this->history->save($dbPatch, $video->getVideoId());
@@ -135,7 +135,7 @@ final class ProcessVideosFromYoutube
             $this->logger->info('Skip handleRutube: '.$video->getVideoId());
             return;
         }
-        $this->logger->info('Start: handleRutube');
+        $this->logger->info('Start: handleRutube '.$video->getVideoId());
         $response = $this->rutube->upload($video);
         if ($response['video_id']) {
             $this->history->save($dbPatch, $video->getVideoId());

@@ -10,16 +10,13 @@ use Coderun\Common\ValueObject\Video as YoutubeVideo;
 use Coderun\Common\Collection\VideoMap;
 use Google_Service_YouTube;
 use Google_Service_YouTube_SearchResult;
-use Google_Service_YouTube_Video;
 use YouTube\Exception\TooManyRequestsException;
 use YouTube\Exception\YouTubeException;
 use YouTube\Models\StreamFormat;
 use YouTube\YouTubeDownloader;
 
 use function array_pop;
-use function implode;
 use function sprintf;
-use function array_chunk;
 use function array_filter;
 
 /**
@@ -38,6 +35,8 @@ class FindVideo
     protected SearchParams $searchParams;
     /** @var YouTubeDownloader  */
     protected YouTubeDownloader $youTubeDownloader;
+    /** @var array<string, int> */
+    protected array $errors = [];
 
     /**
      * @param Google_Service_YouTube $googleService
@@ -64,30 +63,9 @@ class FindVideo
     public function find(): VideoMap
     {
         $videoMap = new VideoMap();
-        $videos = $this->googleService->videos->listVideos(
-            'id',
-            ['id' => implode(',', $this->getVideoIds())]
-        );
-        /** @var Google_Service_YouTube_Video $video */
-        foreach ($videos as $video) {
-            $downloadLinks = $this->youTubeDownloader->getDownloadLinks(
-                sprintf(self::YOUTUBE_VIDEO_URL, $video->getId())
-            );
-            $directLink = null;
-            if ($downloadLinks->getAllFormats()) {
-                $videFormats = $downloadLinks->getCombinedFormats();
-                /** @var StreamFormat $videoHighQuality */
-                $videoHighQuality = array_pop($videFormats);
-                $directLink = $videoHighQuality->url ?? null;
-            }
-            if ($directLink === null) {
-                // todo запись в лог
-                continue;
-            }
-            $videoMap->offsetSet(
-                $video->getId(),
-                new YoutubeVideo($directLink, $downloadLinks->getInfo())
-            );
+        $videoIds = $this->getVideoIds();
+        foreach ($videoIds as $videoId) {
+            $this->composeVideoObject($videoId, $videoMap);
         }
 
         return $videoMap;
@@ -100,19 +78,10 @@ class FindVideo
      * @throws TooManyRequestsException
      * @throws YouTubeException
      */
-    public function findAll(int $batch = 5): VideoMap
+    public function findAll(): VideoMap
     {
         $videoIds = $this->getVideoIdsWithParams();
-        $videosList = [];
-//        foreach (array_chunk($videoIds, 25) as $chunkIds) {
-//            $videosList[] = $this->googleService->videos->listVideos( // todo лишний запрос
-//                'id',
-//                ['id' => implode(',', $chunkIds)]
-//            );
-//        }
-
         $videoMap = new VideoMap();
-        /** @var Google_Service_YouTube_Video $video */
         foreach ($videoIds as $videoId) {
             $this->composeVideoObject($videoId, $videoMap);
         }
@@ -130,10 +99,8 @@ class FindVideo
      */
     protected function composeVideoObject(string $videoId, VideoMap $videoMap): void
     {
-        static $errors = [];
-
         try {
-            $errors[$videoId] = 0;
+            $this->errors[$videoId] = $this->errors[$videoId] ?? 0;
             $downloadLinks = $this->youTubeDownloader->getDownloadLinks(
                 sprintf(self::YOUTUBE_VIDEO_URL, $videoId)
             );
@@ -153,8 +120,8 @@ class FindVideo
                 new YoutubeVideo($directLink, $downloadLinks->getInfo())
             );
         } catch (YouTubeException $e) {
-            $errors[$videoId]++;
-            if ($errors[$videoId] < 3) {
+            $this->errors[$videoId]++;
+            if ($this->errors[$videoId] < 3) {
                 $this->composeVideoObject($videoId, $videoMap);
                 return;
             }
