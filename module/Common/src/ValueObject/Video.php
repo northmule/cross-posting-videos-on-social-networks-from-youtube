@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Coderun\Common\ValueObject;
 
-use Closure;
+use ReflectionProperty;
 use YouTube\Models\VideoDetails;
 
 use function array_pop;
@@ -49,18 +49,18 @@ class Video
     protected string $description = '';
     /** @var string  */
     protected string $thumbnailUrl = '';
-
+    
     /**
      * @param string            $directLink
      * @param VideoDetails|null $videoDetails
+     *
+     * @throws \ReflectionException
      */
     public function __construct(string $directLink, ?VideoDetails $videoDetails = null)
     {
+        $videoDetailsProperty = new ReflectionProperty($videoDetails, 'videoDetails');
         /** @var array<string, mixed> $data */
-        $data = Closure::bind(function (): array {
-            return $this->videoDetails ?? [];
-        }, null)->call($videoDetails);
-
+        $data = $videoDetailsProperty->getValue($videoDetails) ?? [];
         $this->videoId = $data['videoId'] ?? '';
         $this->title = $data['title'] ?? '';
         $this->keywords = $data['keywords'] ?? [];
