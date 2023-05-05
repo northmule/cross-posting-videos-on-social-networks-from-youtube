@@ -8,8 +8,8 @@ use Coderun\Common\ValueObject\Video;
 use Coderun\Youtube\ValueObject\SearchParams;
 use Coderun\Common\ValueObject\Video as YoutubeVideo;
 use Coderun\Common\Collection\VideoMap;
-use Google_Service_YouTube;
-use Google_Service_YouTube_SearchResult;
+use Google\Service\YouTube;
+use Google\Service\YouTube\SearchResult;
 use YouTube\Exception\TooManyRequestsException;
 use YouTube\Exception\YouTubeException;
 use YouTube\Models\StreamFormat;
@@ -29,8 +29,8 @@ class FindVideo
     /** @var string  */
     protected const YOUTUBE_VIDEO_URL = 'https://www.youtube.com/watch?v=%s';
 
-    /** @var Google_Service_YouTube  */
-    protected Google_Service_YouTube $googleService;
+    /** @var YouTube  */
+    protected YouTube $googleService;
     /** @var SearchParams  */
     protected SearchParams $searchParams;
     /** @var YouTubeDownloader  */
@@ -39,12 +39,12 @@ class FindVideo
     protected array $errors = [];
 
     /**
-     * @param Google_Service_YouTube $googleService
+     * @param YouTube $googleService
      * @param SearchParams           $searchParams
      * @param YouTubeDownloader      $youTubeDownloader
      */
     public function __construct(
-        Google_Service_YouTube $googleService,
+        YouTube $googleService,
         SearchParams $searchParams,
         YouTubeDownloader $youTubeDownloader
     ) {
@@ -140,7 +140,6 @@ class FindVideo
             $this->searchParams->getForFirstChannel()
         );
         $videosIds = [];
-        /** @var Google_Service_YouTube_SearchResult $item */
         foreach ($listSearch->getItems() as $item) {
             $videosIds[] = $item->getId()->getVideoId();
         }
@@ -159,7 +158,7 @@ class FindVideo
             array_merge($params, $this->searchParams->getForFirstChannel())
         );
         static $videosIds = [];
-        /** @var Google_Service_YouTube_SearchResult $item */
+        /** @var SearchResult $item */
         foreach ($listSearch->getItems() as $item) {
             $videosIds[] = $item->getId()->getVideoId();
         }
