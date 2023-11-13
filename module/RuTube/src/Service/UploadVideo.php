@@ -6,9 +6,12 @@ namespace Coderun\RuTube\Service;
 
 use Coderun\RuTube\ValueObject\Authorization;
 use Coderun\Common\ValueObject\Video;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
+use Coderun\Youtube\ContentAdapter\AdapterInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+
 
 /**
  * Class UploadVideo
@@ -17,16 +20,13 @@ class UploadVideo
 {
     /** @var string  */
     protected const API_VIDEO_URL = 'https://rutube.ru/api/video/';
-
-    /** @var HttpClientInterface  */
-    protected HttpClientInterface $client;
-
+   
     /**
-     * @param HttpClientInterface $client
+     * @param Client  $client
+     * @param AdapterInterface $contentAdapter
      */
-    public function __construct(HttpClientInterface $client)
+    public function __construct(protected Client $client, protected AdapterInterface $contentAdapter)
     {
-        $this->client = $client;
     }
 
     /**
@@ -34,20 +34,26 @@ class UploadVideo
      * @param Authorization $authorization
      *
      * @return ResponseInterface
-     * @throws TransportExceptionInterface
      */
     public function upload(Video $video, Authorization $authorization): ResponseInterface
     {
-        return $this->client->request('POST', self::API_VIDEO_URL, [
-            'headers' => [
-                'Authorization' => $authorization->getAuthorizationStringForHeader(),
-            ],
-            'body'    => [
-                'url'         => $video->getDirectLink(),
+        $headers = [
+            'Authorization' => $authorization->getAuthorizationStringForHeader(),
+        ];
+        $options = [
+            'form_params' => [
+                'url'         => $this->contentAdapter->getUrl($video),
                 'title'       => $video->getTitle(),
                 'description' => $video->getDescription(),
                 'author'      => $authorization->getAuthor(),
-            ],
-        ]);
+            ]];
+        
+        $request = new Request(
+            'POST', self::API_VIDEO_URL, $headers
+        );
+        /** @var Response $res */
+        $res = $this->client->sendAsync($request, $options)->wait();
+        
+        return $res;
     }
 }

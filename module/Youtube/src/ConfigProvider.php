@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Coderun\Youtube;
 
+
 /**
  * ConfigProvider
  */
@@ -29,10 +30,17 @@ class ConfigProvider
     {
         return [
             'invokables' => [],
-            'reflection' => [],
+            'auto' => [
+                \Coderun\Youtube\ContentAdapter\PresaverCom::class,
+                \Coderun\Youtube\ContentAdapter\Direct::class,
+                \Coderun\Youtube\ContentAdapter\FreemakeCom::class,
+            ],
             'factories'  => [
                 ModuleOptions::class                      => ModuleOptionsFactory::class,
                 \Coderun\Youtube\Service\FindVideo::class => \Coderun\Youtube\Service\Factory\FindVideo::class,
+            ],
+            'aliases' => [
+                \Coderun\Youtube\ContentAdapter\AdapterInterface::class => \Coderun\Youtube\ContentAdapter\PresaverCom::class,
             ],
         ];
     }

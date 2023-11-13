@@ -29,7 +29,7 @@ class ConfigProvider
     {
         return [
             'invokables' => [],
-            'reflection' => [],
+            'auto' => [],
             'factories'  => [
                 ModuleOptions::class                   => ModuleOptionsFactory::class,
                 \Coderun\Common\Service\History::class => \Coderun\Common\Service\Factory\History::class,

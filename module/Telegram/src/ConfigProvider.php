@@ -29,10 +29,11 @@ class ConfigProvider
     {
         return [
             'invokables' => [],
-            'reflection' => [],
+            'auto' => [
+                \Coderun\Telegram\Service\UploadVideo::class,
+            ],
             'factories'  => [
                 ModuleOptions::class                         => ModuleOptionsFactory::class,
-                \Coderun\Telegram\Service\UploadVideo::class => \Coderun\Telegram\Service\Factory\UploadVideo::class,
                 \Coderun\Telegram\Handler\UploadVideo::class => \Coderun\Telegram\Handler\Factory\UploadVideo::class,
 
             ],

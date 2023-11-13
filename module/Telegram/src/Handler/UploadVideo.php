@@ -40,8 +40,7 @@ class UploadVideo
     public function upload(Video $video): array
     {
         $response = $this->service->upload($video, $this->authorization);
-        $content = $response->toArray();
-        $response->cancel();
-        return $content;
+        $content = json_decode($response->getBody()->getContents(), true);
+        return is_array($content) ? $content : [];
     }
 }

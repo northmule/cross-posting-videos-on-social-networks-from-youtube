@@ -29,12 +29,12 @@ class ConfigProvider
     {
         return [
             'invokables' => [],
-            'reflection' => [
-              //  \Coderun\RuTube\Service\UploadVideo::class,
+            'auto' => [
+                \Coderun\RuTube\Service\UploadVideo::class,
             ],
             'factories'  => [
                 ModuleOptions::class                       => ModuleOptionsFactory::class,
-                \Coderun\RuTube\Service\UploadVideo::class => \Coderun\RuTube\Service\Factory\UploadVideo::class,
+               // \Coderun\RuTube\Service\UploadVideo::class => \Coderun\RuTube\Service\Factory\UploadVideo::class,
                 \Coderun\RuTube\Handler\UploadVideo::class => \Coderun\RuTube\Handler\Factory\UploadVideo::class,
             ],
         ];

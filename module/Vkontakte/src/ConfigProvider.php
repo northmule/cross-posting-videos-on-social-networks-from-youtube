@@ -28,11 +28,15 @@ class ConfigProvider
     public function getDependencies(): array
     {
         return [
-            'invokables' => [],
-            'reflection' => [],
+            'invokables' => [
+                \GuzzleHttp\Client::class,
+            ],
+            'auto' => [
+                \Coderun\Youtube\ContentAdapter\PresaverCom::class,
+                \Coderun\Vkontakte\Service\UploadVideo::class,
+            ],
             'factories'  => [
                 ModuleOptions::class                          => ModuleOptionsFactory::class,
-                \Coderun\Vkontakte\Service\UploadVideo::class => \Coderun\Vkontakte\Service\Factory\UploadVideo::class,
                 \Coderun\Vkontakte\Handler\UploadVideo::class => \Coderun\Vkontakte\Handler\Factory\UploadVideo::class,
 
             ],

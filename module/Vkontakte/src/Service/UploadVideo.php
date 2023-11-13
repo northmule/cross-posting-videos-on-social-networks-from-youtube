@@ -6,9 +6,12 @@ namespace Coderun\Vkontakte\Service;
 
 use Coderun\Vkontakte\ValueObject\Authorization;
 use Coderun\Common\ValueObject\Video;
+use Coderun\Youtube\ContentAdapter\AdapterInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 use function json_decode;
 
@@ -19,16 +22,14 @@ class UploadVideo
 {
     /** @var string  */
     protected const API_VIDEO_SAVE_URL = 'https://api.vk.com/method/video.save?';
-
-    /** @var HttpClientInterface  */
-    protected HttpClientInterface $client;
-
+    
+    
     /**
-     * @param HttpClientInterface $client
+     * @param Client  $client
+     * @param AdapterInterface $contentAdapter
      */
-    public function __construct(HttpClientInterface $client)
+    public function __construct(protected Client $client, protected AdapterInterface $contentAdapter)
     {
-        $this->client = $client;
     }
 
     /**
@@ -40,13 +41,14 @@ class UploadVideo
      */
     public function upload(Video $video, Authorization $authorization): ResponseInterface
     {
+        /** @var \GuzzleHttp\Psr7\Response $response */
         $response = $this->client->request(
             'GET',
             self::API_VIDEO_SAVE_URL,
             [
                 'query' => [
                     'group_id'     => $authorization->getGroupId(),
-                    'link'         => $video->getLink(),
+                    // 'link'         => $video->getLink(),
                     'name'         => $video->getTitle(),
                     'description'  => $video->getDescription(),
                     'wallpost'     => 1,
@@ -57,12 +59,29 @@ class UploadVideo
             ]
         );
 
-        $contentResponse = json_decode($response->getContent());
+        $contentResponse = json_decode($response->getBody()->getContents());
         /** @phpstan-ignore-next-line */
         $uploadUrl = $contentResponse->response->upload_url ?? null;
         if (empty($uploadUrl)) {
             return $response;
         }
-        return $this->client->request('GET', $uploadUrl);
+        $videoContent = $this->contentAdapter->getContent($video);
+        
+        if (empty($videoContent)) {
+            return new \GuzzleHttp\Psr7\Response();
+        }
+
+        /** @var \GuzzleHttp\Psr7\Response $responseVKUpload */
+        $responseVKUpload = $this->client->request('POST', $uploadUrl, [
+            'multipart' => [
+                [
+                    'name' => $video->getTitle(),
+                    'contents' => $videoContent,
+                    'filename' => md5($video->getVideoId()).'.mp4',
+                ],
+            ],
+        ]);
+        return $responseVKUpload;
     }
+
 }

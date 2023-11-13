@@ -12,7 +12,7 @@ declare(strict_types=1);
 use Coderun\Common\ModuleOptions as CommonModuleOptions;
 use Coderun\Common\Service\History;
 use Coderun\Common\ValueObject\Video;
-use Coderun\Container\ContainerUnit;
+use Northmule\Container\ContainerUnit;
 use Coderun\RuTube\Handler\UploadVideo as UploadVideoRutube;
 use Coderun\Telegram\Handler\UploadVideo as UploadVideoTelegram;
 use Coderun\Vkontakte\Handler\UploadVideo as UploadVideoVk;
@@ -79,6 +79,9 @@ final class ProcessVideosFromYoutube
         } catch (Throwable $e) {
             $this->logger->error('Catch throwable: ');
             $this->logger->error($e->getMessage(), ['trace' => $e->getTrace()]);
+            print_r([
+                'message' => $e->getMessage(),
+            ]);
         } finally {
             $this->logger->info('Finally processing');
         }
@@ -98,7 +101,7 @@ final class ProcessVideosFromYoutube
         }
         $this->logger->info('Start: handleVkontakte '.$video->getVideoId());
         $response = $this->vkontakte->upload($video);
-        if ($response['response']) {
+        if ($response['video_hash']) {
             $this->history->save('handleVkontakte.db', $video->getVideoId());
         }
         $this->logger->info('End: handleVkontakte', ['response' => $response]);
@@ -144,5 +147,11 @@ final class ProcessVideosFromYoutube
     }
     
 }
+try {
+    (new ProcessVideosFromYoutube())($container);
+} catch (Throwable $e) {
+    print_r([
+        'message' => $e->getMessage(),
+    ]);
+}
 
-(new ProcessVideosFromYoutube())($container);
