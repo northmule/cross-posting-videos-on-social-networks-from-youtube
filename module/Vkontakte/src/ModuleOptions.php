@@ -20,16 +20,6 @@ class ModuleOptions extends AbstractOptions
     protected Api $api;
 
     /**
-     * ModuleOptions constructor.
-     *
-     * @param null|array<string, mixed> $options
-     */
-    public function __construct($options = null)
-    {
-        $this->api = new Api($options);
-    }
-
-    /**
      * Get api
      *
      * @return Api
@@ -38,4 +28,20 @@ class ModuleOptions extends AbstractOptions
     {
         return $this->api;
     }
+    
+    /**
+     * @param Api $api
+     *
+     * @return ModuleOptions
+     */
+    protected function setApi(mixed $api): ModuleOptions
+    {
+        if (!$api instanceof Api) {
+            $api = new Api($api);
+        }
+        $this->api = $api;
+        return $this;
+    }
+    
+    
 }

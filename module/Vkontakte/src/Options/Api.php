@@ -21,6 +21,10 @@ class Api extends AbstractOptions
     protected string $albumId;
     /** @var string  */
     protected string $version;
+    /** @var string  */
+    protected string $archiveAlbumId;
+    /** string */
+    protected string $wallpost;
 
     /**
      * Get groupId
@@ -61,7 +65,27 @@ class Api extends AbstractOptions
     {
         return $this->version;
     }
-
+    
+    /**
+     * Get archiveAlbumId
+     *
+     * @return string
+     */
+    public function getArchiveAlbumId(): string
+    {
+        return $this->archiveAlbumId;
+    }
+    
+    /**
+     * Get wallpost
+     *
+     * @return string
+     */
+    public function getWallpost(): string
+    {
+        return $this->wallpost;
+    }
+    
     /**
      * @param string $groupId
      *
@@ -105,4 +129,27 @@ class Api extends AbstractOptions
         $this->version = $version;
         return $this;
     }
+    
+    /**
+     * @param string $archiveAlbumId
+     *
+     * @return Api
+     */
+    protected function setArchiveAlbumId(string $archiveAlbumId): Api
+    {
+        $this->archiveAlbumId = $archiveAlbumId;
+        return $this;
+    }
+    
+    /**
+     * @param string $wallpost
+     *
+     * @return Api
+     */
+    protected function setWallpost(string $wallpost): Api
+    {
+        $this->wallpost = $wallpost;
+        return $this;
+    }
+
 }

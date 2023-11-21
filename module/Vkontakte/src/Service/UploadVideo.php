@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Coderun\Vkontakte\Service;
 
+use Coderun\Vkontakte\ModuleOptions;
+use Coderun\Vkontakte\Options\Api;
 use Coderun\Vkontakte\ValueObject\Authorization;
 use Coderun\Common\ValueObject\Video;
 use Coderun\Youtube\ContentAdapter\AdapterInterface;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 use function json_decode;
+use function intval;
 
 /**
  * Class UploadVideo
@@ -28,7 +29,7 @@ class UploadVideo
      * @param Client  $client
      * @param AdapterInterface $contentAdapter
      */
-    public function __construct(protected Client $client, protected AdapterInterface $contentAdapter)
+    public function __construct(protected Client $client, protected AdapterInterface $contentAdapter, protected ModuleOptions $options)
     {
     }
 
@@ -39,7 +40,7 @@ class UploadVideo
      * @return ResponseInterface
      * @throws TransportExceptionInterface
      */
-    public function upload(Video $video, Authorization $authorization): ResponseInterface
+    public function upload(Video $video): ResponseInterface
     {
         /** @var \GuzzleHttp\Psr7\Response $response */
         $response = $this->client->request(
@@ -47,14 +48,14 @@ class UploadVideo
             self::API_VIDEO_SAVE_URL,
             [
                 'query' => [
-                    'group_id'     => $authorization->getGroupId(),
+                    'group_id'     => $this->options->getApi()->getGroupId(),
                     // 'link'         => $video->getLink(),
                     'name'         => $video->getTitle(),
                     'description'  => $video->getDescription(),
-                    'wallpost'     => 1,
-                    'access_token' => $authorization->getToken(),
-                    'album_id'     => $authorization->getAlbumId(),
-                    'v'            => $authorization->getApiVersion(),
+                    'wallpost'     => intval($this->options->getApi()->getWallpost()),
+                    'access_token' => $this->options->getApi()->getToken(),
+                    'album_id'     => $this->options->getApi()->getAlbumId(),
+                    'v'            => $this->options->getApi()->getVersion(),
                 ],
             ]
         );

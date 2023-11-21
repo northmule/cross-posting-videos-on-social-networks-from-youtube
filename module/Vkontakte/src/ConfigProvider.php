@@ -34,10 +34,10 @@ class ConfigProvider
             'auto' => [
                 \Coderun\Youtube\ContentAdapter\PresaverCom::class,
                 \Coderun\Vkontakte\Service\UploadVideo::class,
+                \Coderun\Vkontakte\Handler\UploadVideo::class,
             ],
             'factories'  => [
                 ModuleOptions::class                          => ModuleOptionsFactory::class,
-                \Coderun\Vkontakte\Handler\UploadVideo::class => \Coderun\Vkontakte\Handler\Factory\UploadVideo::class,
 
             ],
         ];

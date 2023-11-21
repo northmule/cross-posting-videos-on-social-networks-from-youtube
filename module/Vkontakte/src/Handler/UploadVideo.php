@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Coderun\Vkontakte\Handler;
 
-use Coderun\Vkontakte\ValueObject\Authorization;
 use Coderun\Common\ValueObject\Video;
 use Coderun\Vkontakte\Service\UploadVideo as UploadVideoService;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -16,19 +15,12 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 class UploadVideo
 {
-    /** @var Authorization  */
-    protected Authorization $authorization;
-    /** @var UploadVideoService  */
-    protected UploadVideoService $service;
 
     /**
-     * @param Authorization      $authorization
      * @param UploadVideoService $service
      */
-    public function __construct(Authorization $authorization, UploadVideoService $service)
+    public function __construct(protected UploadVideoService $service)
     {
-        $this->authorization = $authorization;
-        $this->service = $service;
     }
 
     /**
@@ -39,7 +31,7 @@ class UploadVideo
      */
     public function upload(Video $video): array
     {
-        $response = $this->service->upload($video, $this->authorization);
+        $response = $this->service->upload($video);
         $content = json_decode($response->getBody()->getContents(), true);
         return is_array($content) ? $content : [];
     }
