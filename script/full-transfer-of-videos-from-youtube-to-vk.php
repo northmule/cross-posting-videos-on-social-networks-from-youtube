@@ -103,6 +103,7 @@ final class FullTransferOfVideosFromYoutubeToVk
         $response = $this->vk->upload($video);
         if ($response['video_hash']) {
             $this->history->save($dbPatch, $video->getVideoId());
+            echo 'Success: '.$video->getVideoId().PHP_EOL;
         }
         $this->logger->info('End: handleRutube', ['response' => $response]);
     }
@@ -113,4 +114,9 @@ try {
     (new FullTransferOfVideosFromYoutubeToVk())($container);
 } catch (Throwable $e) {
     echo $e->getMessage();
+    if (str_contains($e->getMessage(), 'cURL error')) {
+        echo 'Error:'. $e::class.PHP_EOL;
+        echo 'Restart'.PHP_EOL;
+        (new FullTransferOfVideosFromYoutubeToVk())($container);
+    }
 }
