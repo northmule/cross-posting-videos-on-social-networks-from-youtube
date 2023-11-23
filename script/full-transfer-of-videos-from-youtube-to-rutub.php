@@ -60,10 +60,10 @@ final class FullTransferOfVideosFromYoutubeToRutub
             $this->logger->info('Start processing');
             if (!$this->history->fileExists('toRutube.data')) {
                 $videosMap = $youtube->findAll();
-                $this->history->save('toRutube.data', $videosMap->serialize());
+                $this->history->save('toRutube.data', serialize($videosMap));
             } else {
                 $videosMapData = $this->history->getFileContent('toRutube.data');
-                $videosMap = new VideoMap(unserialize($videosMapData));
+                $videosMap = unserialize($videosMapData);
             }
             $this->logger->info('YouTube video count: '. $videosMap->count());
             /**
